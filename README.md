@@ -1,6 +1,8 @@
 # Power Demand Forecast TR — Baseline Forecasting + FastAPI Inference
 
-![CI](../../actions/workflows/ci.yml/badge.svg)
+![Swagger Predict Demo](swagger_predict.png)
+
+[![CI](https://github.com/ozleyisyavuz/power-demand-forecast-tr/actions/workflows/ci.yml/badge.svg)](https://github.com/ozleyisyavuz/power-demand-forecast-tr/actions/workflows/ci.yml)
 
 > **Highlights:** 14-day holdout ile **%1.69 MAPE**, FastAPI inference (`/predict`), pytest + GitHub Actions CI (✅)
 
@@ -28,10 +30,10 @@ Değerlendirme, zaman serilerinde sık görülen “gelecek bilgisi sızıntıs�
 ### Nicel Performans
 - **Validation MAPE (14-day holdout): 1.69%**
 
-### Sonucun Yorumu (Neden Önemli?)
+### Sonucun Yorumu
 - **Düşük hata oranı:** %1.69 MAPE, doğrulama döneminde tahminlerin ortalama olarak hedef talebin yaklaşık %1.69’u kadar saptığını gösterir (sentetik veri senaryosu altında).
-- **Zaman serisi disiplini:** Rastgele train/test ayrımı yerine, “son 14 gün holdout” kullanımı problemi gerçek dünyaya daha yakın simüle eder.
-- **Sistem seviyesinde kanıt:** Sonuç; yalnızca metrik değil, aynı zamanda aşağıdaki mühendislik bileşenleri ile birlikte sunulur:
+- **Zaman serisi disiplini:** Rastgele train/test ayrımı yerine “son 14 gün holdout” kullanımı problemi gerçek dünyaya daha yakın simüle eder.
+- **Sistem seviyesinde kanıt:** Sonuç yalnızca metrik değil; aynı zamanda
   - FastAPI ile **çalışan tahmin servisi** (`/predict`)
   - pytest ile **otomatik test**
   - GitHub Actions ile **CI doğrulaması (yeşil)**
@@ -42,7 +44,7 @@ Aynı veri üretim parametreleri ve seed ile:
 - `train` → model eğitimini tekrarlar,
 - `uvicorn` → aynı API arayüzünü ayağa kaldırır.
 
-> Not: Veri sentetik olduğu için metrik, veri üretim fonksiyonundaki parametre/seed değişimlerine duyarlıdır. Bu proje, “gösterilebilir bir baseline + üretime yakın ML iskeleti” sunmayı hedefler.
+> Not: Veri sentetik olduğu için metrik, veri üretim fonksiyonundaki parametre/seed değişimlerine duyarlıdır. Bu repo “gösterilebilir bir baseline + üretime yakın ML iskeleti” sunmayı hedefler.
 
 ---
 
@@ -51,7 +53,6 @@ Aynı veri üretim parametreleri ve seed ile:
 ### Veri Üretimi
 `make_dataset.py`, saatlik bir zaman dizisi oluşturur ve talebi etkileyebilecek bileşenleri simüle eder:
 - Gün içi döngü (hourly seasonality)
-- Mevsimsellik benzeri bileşen (seasonal component)
 - Hafta sonu etkisi
 - Sıcaklık tabanlı etki + rastgele gürültü
 
@@ -87,93 +88,3 @@ pytest.ini
 README.md
 
 
-## How to run
-```bash
-pip install -r requirements.txt
-python -m power_demand_forecast.data.make_dataset
-python -m power_demand_forecast.models.train
-uvicorn power_demand_forecast.app.main:app --reload
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## API
-
-### Health check
-- GET `/health`
-
-Example:
-```bash
-curl http://127.0.0.1:8000/health
